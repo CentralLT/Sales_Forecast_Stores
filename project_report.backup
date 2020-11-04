@@ -1,0 +1,51 @@
+**Project: Sales Prediction**
+
+	
+The objective of this project is to forecast the sales of xx shops and xx products for the upcoming month. The data set and an in-depth description of the data is available on Kaggle: 
+
+I perform different ML techniques (Random Forest, Ridge Regression, kNN), ensemble methods and DL models (DNN, CNN, RNN) and compare their performance in terms of RMSE. 
+
+I will further go into details about the data set and data preprocessing steps, feature engineering, ML and DL methods and results.
+
+
+1. **Data and data preprocessing**
+
+The data is a longitudinal data set with date, shop id and item id as identifiers. It provides time series and cross-sectional information about the number of items sold and their respective price in a specific shop on a specific date.
+In a first step, I convert the daily data into monthly data by aggregating number of sold items and average the price per shop-item oberservation on a monthly basis. Further, I check the distribution of prices and sold items. 
+
+[Graph]
+
+I delete 0 and negative prices from the data. 
+
+In a second step, I expand the data set by including products with 0 sold items during a month as the data set does not include 0 sales. 
+
+In a third step, I merge data with descriptions about items, item categories and shops. I use this additional information to: 
+
+* 	a. cluster shops in city clusters,
+* 	b. cluster shops in location clusters (e.g., shopping centers),
+* 	c. cluster items into new item categorie clusters 
+
+based on the description of the shops and items. I use a bag-of-words approach after standardizing the descriptions and perform clustering based on the similarities of descriptions. To determine the number of clusters I employ the elbow method.
+
+[Graph]
+
+2. **Feature Engineering**
+
+The most important part of this project is to build meaningful features to predict the number of sold items for the next month. I analyze the time-series of sold items per month after aggregating all observations on a monthly level (aggregate all shops and items). 
+
+[Graph]
+
+The time-series shows a clear downward sloping trend and seasonality. Seasonality is typical for retailer with strong sales during christmas. These findings suggest that I have to take care of the trend/autocorelation and the seasonlity. I do so by including an one month lag and a moving average over the last 12 months for number of items sold. This makes the time-series more stationary and therefore forecastable. Furthermore, I include a variable capturing the change in prices and items sold from t-2 to t-1. 
+In a further step, I want to take advantage of the cross-sectional nature of the data by including variables based on different clusters (city, location, item category, item id). I employ mean encoding for these categorical variables. I also include lagged values of prices and # of items sold and innovations of these variables from t-2 to t-1 on a cluster level.
+This results in a total of XXX features. Features selection will be performed during the modeling stage.
+
+**3. Overview of ML and DL methods**
+
+I use all common ML methods for predictive analytics: Ridge regression, kNN and Random Forest.
+I also construct an own ensemble estimator with bagging based on these ML methods. Further, I employ CatBoost and XGBoost.
+Finally, I use DL techniques such as DNN, CNN and RNN for this predictive task. For the RNN method, I construct a sequential data set with different sequence length including only data about the number of items sold.
+
+**4. Results**
+
+[Graph]
+
